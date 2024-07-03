@@ -1,0 +1,7 @@
+shellcodePayload addr : 0x00007FF786592000
+alloc_mem addr       : 0x0000021085BC0000
+
+
+Address          Disa
+0000021085BC0000 nop 
+00007FF786592000 nop 

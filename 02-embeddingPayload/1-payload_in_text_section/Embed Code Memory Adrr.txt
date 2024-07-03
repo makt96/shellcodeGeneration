@@ -1,0 +1,8 @@
+shellcodePayload addr : 0x0000006327FAFB30
+alloc_mem addr       : 0x0000022EC84B0000
+
+
+Address           Disassembly                                                                                                                                                                                                                                                   
+0000006327FAFB30  nop 
+0000022EC84B0000  nop 
+00007FF7F3FA101E  nop 
